@@ -1,0 +1,30 @@
+### 게시글 페이지 리스트 조회
+GET {{host}}/boards?page=2
+
+### 게시글 폼 형태
+#GET {{host}}/boards/board/form
+
+### 게시글 업로드
+POST {{host}}/boards/board
+Content-Type: application/json
+
+{
+  "title": "내가 넣은 데이터",
+  "contents": "내용내용내용"
+}
+
+### 게시글 삭제
+DELETE {{host}}/boards/1
+
+### 게시글 단건 조회
+GET {{host}}/boards/2
+
+### 업데이트
+PUT {{host}}/boards
+Content-Type: application/json
+
+{
+  "id" : 3,
+  "title": "내가 넣은 데이터",
+  "contents": "내용내용내용"
+}
