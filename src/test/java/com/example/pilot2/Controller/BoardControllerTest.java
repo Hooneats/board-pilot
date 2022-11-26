@@ -39,10 +39,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 public class BoardControllerTest {
 
     @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @MockBean
-    BoardService boardService;
+    private BoardService boardService;
 
     @WithMockUser
     @DisplayName("GET - 게시글 리스트 조회(페이징)")
@@ -60,6 +60,7 @@ public class BoardControllerTest {
                 .queryParam("page", String.valueOf(pageRequest.getPageNumber()))
                 .queryParam("sort", sortProperty)
                 .queryParam("direction", Sort.Direction.DESC.name());
+
         // when & then
         mvc.perform(queryParam)
                 .andExpect(MockMvcResultMatchers.status().isOk())

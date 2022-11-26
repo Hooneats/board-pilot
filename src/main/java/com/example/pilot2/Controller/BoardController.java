@@ -17,11 +17,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Entity 를 외부에 노출하는것은 보안상 위험하다. Dto 사용
- */
 @Slf4j
-@RestController // TODO 타임리프 추가되면 @Controller 로 변경해야함
+@RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {

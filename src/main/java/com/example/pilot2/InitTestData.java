@@ -36,7 +36,6 @@ public class InitTestData {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
     private final BoardRepository boardRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -54,14 +53,8 @@ public class InitTestData {
 
         UserEntity adminEntity = new UserEntity("admin", passwordEncoder.encode("admin"), savedAdminRoleEntity);
         UserEntity userEntity = new UserEntity("user", passwordEncoder.encode("user"), savedUserRoleEntity);
-        UserEntity savedAdminEntity = userRepository.save(adminEntity);
-        UserEntity savedUserEntity = userRepository.save(userEntity);
-
-//        UserRoleEntity userRoleEntity1 = new UserRoleEntity(savedAdminEntity, savedAdminRoleEntity);
-//        UserRoleEntity userRoleEntity2 = new UserRoleEntity(savedUserEntity, savedUserRoleEntity);
-//        userRoleRepository.save(userRoleEntity1);
-//        userRoleRepository.save(userRoleEntity2);
-
+        userRepository.save(adminEntity);
+        userRepository.save(userEntity);
 
         List<BoardEntity> boardEntityList = new ArrayList<>();
         IntStream.range(0, 45)

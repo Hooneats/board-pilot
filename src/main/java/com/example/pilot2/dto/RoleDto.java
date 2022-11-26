@@ -7,9 +7,6 @@ import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * A DTO for the {@link com.example.pilot2.Entity.RoleEntity} entity
- */
 @Getter
 @Builder
 @NoArgsConstructor

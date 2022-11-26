@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 public class TestSecurityConfig {
 
     @MockBean
-    UserService userService;
+    private UserService userService;
 
     @BeforeTestMethod
     public void securitySetup() {

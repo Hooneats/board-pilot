@@ -2,10 +2,8 @@ package com.example.pilot2.Service;
 
 import com.example.pilot2.Entity.RoleEntity;
 import com.example.pilot2.Entity.UserEntity;
-import com.example.pilot2.Entity.UserRoleEntity;
 import com.example.pilot2.Repository.RoleRepository;
 import com.example.pilot2.Repository.UserRepository;
-import com.example.pilot2.Repository.UserRoleRepository;
 import com.example.pilot2.dto.RoleDto;
 import com.example.pilot2.dto.UserDto;
 import com.example.pilot2.dto.request.UserRoleForm;

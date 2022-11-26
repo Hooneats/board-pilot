@@ -14,9 +14,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
-/**
- * abstract 클래스로 만들어 AuditingFields 는 반드시 상속을 통해 사용되도록
- */
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
