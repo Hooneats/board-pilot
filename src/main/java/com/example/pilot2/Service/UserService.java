@@ -6,7 +6,7 @@ import com.example.pilot2.Repository.RoleRepository;
 import com.example.pilot2.Repository.UserRepository;
 import com.example.pilot2.dto.RoleDto;
 import com.example.pilot2.dto.UserDto;
-import com.example.pilot2.dto.request.UserRoleForm;
+import com.example.pilot2.dto.request.UserRoleRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,14 +29,14 @@ public class UserService {
                 .map(UserDto::from);
     }
 
-    public UserDto saveUser(final UserRoleForm userRoleForm) {
+    public UserDto saveUser(final UserRoleRequest userRoleRequest) {
         // get foundRoleEntity
-        RoleDto roleDto = userRoleForm.toRoleDto();
+        RoleDto roleDto = userRoleRequest.toRoleDto();
         RoleEntity foundRoleEntity = findRoleEntity(roleDto);
 
         // get saveEntity
-        String encodedPwd = encodePassword(userRoleForm.getPassword());
-        UserDto userDto = userRoleForm.toUserDto(encodedPwd);
+        String encodedPwd = encodePassword(userRoleRequest.getPassword());
+        UserDto userDto = userRoleRequest.toUserDto(encodedPwd);
         UserEntity userEntity = userDto.toEntity();
         userEntity.addRoleEntity(foundRoleEntity);
         UserEntity savedUserEntity = userRepository.save(userEntity);

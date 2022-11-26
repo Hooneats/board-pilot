@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleForm implements Serializable {
+public class UserRoleRequest implements Serializable {
     private String username;
     private String password;
     private Authority authority;

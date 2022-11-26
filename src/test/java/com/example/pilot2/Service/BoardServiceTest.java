@@ -3,6 +3,7 @@ package com.example.pilot2.Service;
 import com.example.pilot2.Entity.BoardEntity;
 import com.example.pilot2.Entity.UserEntity;
 import com.example.pilot2.Repository.BoardRepository;
+import com.example.pilot2.Repository.UserRepository;
 import com.example.pilot2.dto.BoardDto;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,8 @@ class BoardServiceTest {
 
     @Mock
     private BoardRepository boardRepository;
+    @Mock
+    private UserRepository userRepository;
 
 
     @DisplayName("페이지된 게시글 목록 전체 조회")
@@ -55,15 +58,18 @@ class BoardServiceTest {
                 .contents("테스트_본문")
                 .build();
         Long saveId = 999L;
-        BoardEntity boardEntity = new BoardEntity(saveId, boardDto.getTitle(), boardDto.getContents(), null);
+        UserEntity userEntity = new UserEntity("테스트_유저", "테스트_pw");
+        BoardEntity boardEntity = new BoardEntity(saveId, boardDto.getTitle(), boardDto.getContents(), userEntity);
         given(boardRepository.save(any(BoardEntity.class))).willReturn(boardEntity);
+        given(userRepository.findByUsername(anyString())).willReturn(Optional.ofNullable(userEntity));
 
         //when
-        Long savedId = sut.save(boardDto);
+        Long savedId = sut.save(boardDto,userEntity.getUsername());
 
         //then
         assertThat(savedId).isEqualTo(saveId);
         then(boardRepository).should().save(any(BoardEntity.class));
+        then(userRepository).should().findByUsername(anyString());
     }
 
     @DisplayName("게시글 단건 조회")

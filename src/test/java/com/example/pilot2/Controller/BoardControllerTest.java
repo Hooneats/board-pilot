@@ -3,8 +3,8 @@ package com.example.pilot2.Controller;
 import com.example.pilot2.Service.BoardService;
 import com.example.pilot2.config.TestSecurityConfig;
 import com.example.pilot2.dto.BoardDto;
-import com.example.pilot2.dto.request.BoardPostForm;
-import com.example.pilot2.dto.request.BoardUpdateForm;
+import com.example.pilot2.dto.request.BoardPostRequest;
+import com.example.pilot2.dto.request.BoardUpdateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -77,7 +77,7 @@ public class BoardControllerTest {
     @Test
     void 게시글_업로드를_위한_form() throws Exception {
         // given
-        BoardPostForm boardPostForm = new BoardPostForm();
+        BoardPostRequest boardPostRequest = new BoardPostRequest();
 
         // when & then
         mvc.perform(MockMvcRequestBuilders.get("/boards/board/form"))
@@ -93,11 +93,12 @@ public class BoardControllerTest {
         // given
         String title = "테스트_제목";
         String contents = "테스트_본문";
-        BoardPostForm boardPostForm = new BoardPostForm(title, contents);
-        given(boardService.save(any(BoardDto.class))).willReturn(anyLong());
+        Long savedId = 999L;
+        BoardPostRequest boardPostRequest = new BoardPostRequest(title, contents);
+        given(boardService.save(any(BoardDto.class), anyString())).willReturn(savedId);
 
         ObjectMapper mapper = new ObjectMapper();
-        String requestBody = mapper.writeValueAsString(boardPostForm);
+        String requestBody = mapper.writeValueAsString(boardPostRequest);
 
         MockHttpServletRequestBuilder postURI =
                 MockMvcRequestBuilders
@@ -109,8 +110,9 @@ public class BoardControllerTest {
 
         // when & then
         mvc.perform(postURI)
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        then(boardService).should().save(any(BoardDto.class));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(String.valueOf(savedId)));
+        then(boardService).should(times(1)).save(any(BoardDto.class), anyString());
     }
 
     @WithUserDetails(value = "superAccount", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -170,7 +172,7 @@ public class BoardControllerTest {
     void 게시글_업데이트() throws Exception {
         // given
         Long boardId = 999L;
-        BoardUpdateForm updateBoardForm = BoardUpdateForm.builder()
+        BoardUpdateRequest updateBoardForm = BoardUpdateRequest.builder()
                 .id(boardId)
                 .title("업데이트_제목")
                 .contents("업데이트_본문")
@@ -211,7 +213,8 @@ public class BoardControllerTest {
 
         // when & then
         mvc.perform(putURI)
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(String.valueOf(true)));
         then(boardService).should().checkUsername(anyLong(), anyString());
     }
 }

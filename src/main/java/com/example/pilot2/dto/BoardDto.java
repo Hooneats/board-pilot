@@ -1,6 +1,7 @@
 package com.example.pilot2.dto;
 
 import com.example.pilot2.Entity.BoardEntity;
+import com.example.pilot2.Entity.UserEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -37,7 +38,7 @@ public class BoardDto implements Serializable {
                 .build();
     }
 
-    public BoardEntity toEntity() {
-        return new BoardEntity(this.title, this.contents);
+    public BoardEntity toEntity(UserEntity userEntity) {
+        return new BoardEntity(this.title, this.contents, userEntity);
     }
 }

@@ -4,7 +4,7 @@ import com.example.pilot2.Service.UserService;
 import com.example.pilot2.dto.RoleDto;
 import com.example.pilot2.dto.UserDto;
 import com.example.pilot2.dto.constant.Authority;
-import com.example.pilot2.dto.request.UserRoleForm;
+import com.example.pilot2.dto.request.UserRoleRequest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
@@ -26,7 +26,7 @@ public class TestSecurityConfig {
     public void securitySetup() {
         given(userService.findUser(anyString()))
                 .willReturn(Optional.of(createTestAccountDto()));
-        given(userService.saveUser(any(UserRoleForm.class)))
+        given(userService.saveUser(any(UserRoleRequest.class)))
                 .willReturn(createTestAccountDto());
     }
 

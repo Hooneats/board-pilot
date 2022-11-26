@@ -1,20 +1,15 @@
 package com.example.pilot2.Service;
 
 import com.example.pilot2.Entity.BoardEntity;
+import com.example.pilot2.Entity.UserEntity;
 import com.example.pilot2.Repository.BoardRepository;
+import com.example.pilot2.Repository.UserRepository;
 import com.example.pilot2.dto.BoardDto;
-import com.example.pilot2.dto.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,6 +17,7 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     /**
      * pageable 은 0번 부터이다.
@@ -32,8 +28,10 @@ public class BoardService {
                 .map(BoardDto::from);
     }
 
-    public Long save(final BoardDto boardDto) {
-        final BoardEntity boardEntity = boardDto.toEntity();
+    public Long save(final BoardDto boardDto, final String username) {
+        final UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("회원만 게시글을 등록할 수 있습니다."));
+        final BoardEntity boardEntity = boardDto.toEntity(userEntity);
         final BoardEntity savedEntity = boardRepository.save(boardEntity);
         return savedEntity.getId();
     }
@@ -46,15 +44,17 @@ public class BoardService {
     }
 
     public void deleteBoard(final Long id, String username){
-        BoardEntity boardEntity = checkedUsernameBoardEntity(id, username);
+        final BoardEntity boardEntity = checkedUsernameBoardEntity(id, username);
         boardRepository.delete(boardEntity);
     }
 
     public BoardDto update(final BoardDto boardDto, String username) {
-        BoardEntity boardEntity = checkedUsernameBoardEntity(boardDto.getId(), username);
+        final BoardEntity boardEntity = checkedUsernameBoardEntity(boardDto.getId(), username);
         boardEntity.setTitle(boardDto.getTitle());
         boardEntity.setContents(boardDto.getContents());
-        BoardDto updatedBoardDto = BoardDto.from(boardEntity);
+
+        final BoardDto updatedBoardDto = BoardDto.from(boardEntity);
+
         return updatedBoardDto;
     }
 

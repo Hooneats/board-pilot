@@ -3,8 +3,8 @@ package com.example.pilot2.Controller;
 
 import com.example.pilot2.Service.BoardService;
 import com.example.pilot2.dto.BoardDto;
-import com.example.pilot2.dto.request.BoardPostForm;
-import com.example.pilot2.dto.request.BoardUpdateForm;
+import com.example.pilot2.dto.request.BoardPostRequest;
+import com.example.pilot2.dto.request.BoardUpdateRequest;
 import com.example.pilot2.dto.response.BoardResponse;
 import com.example.pilot2.dto.response.BoardTitleResponse;
 import com.example.pilot2.dto.security.UserPrincipal;
@@ -41,17 +41,18 @@ public class BoardController {
      */
     @Deprecated
     @GetMapping("/board/form")
-    public BoardPostForm getPostForm() {
-        BoardPostForm board = createBoardForm();
+    public BoardPostRequest getPostForm() {
+        BoardPostRequest board = createBoardForm();
         return board;
     }
 
     @PostMapping("/board")
     public Long post(
-            @RequestBody BoardPostForm boardPostForm
+            @RequestBody BoardPostRequest boardPostRequest,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        BoardDto boardDto = boardPostForm.toDto();
-        Long savedId = boardService.save(boardDto);
+        BoardDto boardDto = boardPostRequest.toDto();
+        Long savedId = boardService.save(boardDto, userPrincipal.getUsername());
         return savedId;
     }
 
@@ -59,7 +60,6 @@ public class BoardController {
     public String delete(
             @PathVariable("boardId") Long id,
             @AuthenticationPrincipal UserPrincipal userPrincipal
-
     ) {
         boardService.deleteBoard(id, userPrincipal.getUsername());
         return "ok"; // TODO : 추후 ApiResponse 객체 만들어 Success 에 대해 통일하자
@@ -76,10 +76,10 @@ public class BoardController {
     // TODO : 업데이트와 삭제는 생성자가 일치해야 가능하도록 해야함
     @PutMapping
     public BoardResponse update(
-            @RequestBody BoardUpdateForm boardUpdateForm,
+            @RequestBody BoardUpdateRequest boardUpdateRequest,
             @AuthenticationPrincipal UserPrincipal userPrincipal
             ) {
-        BoardDto boardDto = boardUpdateForm.toDto();
+        BoardDto boardDto = boardUpdateRequest.toDto();
         BoardDto updatedBoardDto = boardService.update(boardDto, userPrincipal.getUsername());
         return BoardResponse.from(updatedBoardDto);
     }
@@ -92,8 +92,8 @@ public class BoardController {
         return boardService.checkUsername(id, userPrincipal.getUsername());
     }
 
-    private BoardPostForm createBoardForm() {
-        return new BoardPostForm();
+    private BoardPostRequest createBoardForm() {
+        return new BoardPostRequest();
     }
 
 }

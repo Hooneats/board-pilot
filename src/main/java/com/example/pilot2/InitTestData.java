@@ -60,7 +60,7 @@ public class InitTestData {
         IntStream.range(0, 45)
                 .forEach(num ->
                         boardEntityList.add(
-                                new BoardEntity("title" + num, "contents" + num)
+                                new BoardEntity("title" + num, "contents" + num, adminEntity)
                         )
                 );
         boardRepository.saveAll(boardEntityList);

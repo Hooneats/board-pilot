@@ -1,6 +1,5 @@
 package com.example.pilot2.dto.request;
 
-import com.example.pilot2.Entity.BoardEntity;
 import com.example.pilot2.dto.BoardDto;
 import lombok.*;
 
@@ -10,13 +9,9 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardPostForm implements Serializable {
+public class BoardPostRequest implements Serializable {
     private String title;
     private String contents;
-
-    public BoardEntity toEntity() {
-        return new BoardEntity(this.title, this.contents);
-    }
 
     public BoardDto toDto() {
         return BoardDto.builder()

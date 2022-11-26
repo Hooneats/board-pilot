@@ -39,9 +39,10 @@ public class BoardEntity extends AuditingFields {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    public BoardEntity(String title, String contents) {
+    public BoardEntity(String title, String contents, UserEntity userEntity) {
         this.title = title;
         this.contents = contents;
+        this.userEntity = userEntity;
     }
 
     @Override
