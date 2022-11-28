@@ -24,6 +24,8 @@ public class SecurityConfig {
             HttpSecurity http
     ) throws Exception {
         return http
+                .httpBasic().and() // postman 테스트를 위한 임시 설정
+                .csrf().disable() // postman 테스트를 위한 임시 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 PathRequest.toStaticResources().atCommonLocations()
